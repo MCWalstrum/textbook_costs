@@ -23,14 +23,31 @@ cpi_data_clean <-
     textbooks = 100 * (textbooks / 101.9 - 1),
     period = as.numeric(str_remove(period, "M")),
     date = make_date(year, period)
+  ) |>
+  select(!c(year, period)) |>
+  relocate(date) |>
+  # Convert data from wide to long to match tidy data standard.
+  pivot_longer(
+    cols = c("inflation", "tuition", "textbooks"),
+    names_to = "series",
+    values_to = "cpi"
   )
 
-# Make a line plot of the data.
-plot(
-  cpi_data_clean$date, 
-  cpi_data_clean$inflation, 
-  type ="l")
+# Create a ggplot.
+textbook_costs_chart <- 
+  ggplot(data = cpi_data_clean) +
+  geom_line(mapping = aes(x = date, y = cpi, color = series)) +
+  labs(title = "Consumer Price Index for Tuition, Textbooks, and All Items",
+       caption = "Source: Bureau of Labor Statistics",
+       x = "",
+       y = "Percent change from January 2002")
+textbook_costs_chart
 
-
-
-
+# Save the textbook_costs_chart as a PNG file
+ggsave(
+  "images/textbook_costs.png", 
+  textbook_costs_chart, 
+  width = 8, 
+  height = 6, 
+  units = "in", 
+  dpi = 300)
