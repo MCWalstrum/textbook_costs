@@ -1,7 +1,7 @@
 library(blsR)
 library(tidyverse)
 # Note: Use bls_set_key() to set the BLS API key.
-bls_set_key("83b591c5fa1f4b308aee6c6bbaf7c0c3")
+
 # Download data from the BLS.
 cpi_data_raw <-
   get_n_series_table(
