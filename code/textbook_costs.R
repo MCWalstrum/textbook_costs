@@ -1,13 +1,28 @@
-library(rjson)
-library(blsAPI)
-        
-        response <- blsAPI('CIU1010000000000A')
-        json     <- fromJSON(response)
-        
-        data_list  <- json$Results$series[[1]]$data[-1]
-        cpi        <- data.frame(matrix(unlist(data_list), ncol = 4, byrow = TRUE, 
-                                        dimnames = list(NULL, c("year", "period", 
-                                                                "periodName", "value"))), 
-                                 stringsAsFactors = FALSE)
-        cpi
-)
+library(blsR)
+library(tidyverse)
+# Note: Use bls_set_key() to set the BLS API key.
+
+# Download data from the BLS.
+cpi_data_raw <-
+  get_n_series_table(
+    list(
+      inflation = 'CUSR0000SA0', 
+      tuition = 'CUSR0000SEEB01', 
+      textbooks = 'CUUR0000SSEA011'), 
+    start_year = 2002, 
+    end_year=2025
+  )
+
+# Set each index to be the percent change in price since January 2002.
+cpi_data_clean <- 
+  cpi_data_raw |>
+  mutate(
+    inflation = 100 * (inflation / 177.7 - 1),
+    tuition = 100 * (tuition / 360.7 - 1),
+    textbooks = 100 * (textbooks / 101.9 - 1)
+  )
+
+# Make a line plot of the data.
+
+
+
