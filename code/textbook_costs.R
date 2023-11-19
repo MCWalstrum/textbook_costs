@@ -22,7 +22,7 @@ cpi_data_clean <-
     tuition = 100 * (tuition / 360.7 - 1),
     textbooks = 100 * (textbooks / 101.9 - 1),
     period = as.numeric(str_remove(period, "M")),
-    date= make_date(year, period)
+    date = make_date(year, period)
   )
 
 # Make a line plot of the data.
