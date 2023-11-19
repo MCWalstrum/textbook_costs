@@ -1,2 +1,2 @@
 # textbook_costs
-A chart with the cost of textbooks relative to inflation
+A repository consisting of code in R to create a chart that represents the cost of textbooks relative to inflation.
